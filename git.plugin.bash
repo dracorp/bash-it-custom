@@ -1,1 +1,1 @@
-export GIT_CEILING_DIRECTORIES="/home/dracorp/"
+export GIT_CEILING_DIRECTORIES="$HOME"

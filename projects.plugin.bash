@@ -1,7 +1,2 @@
-_add2env PROJECT_PATHS "$HOME/Projekty-linux/moje"
-_add2env PROJECT_PATHS "$HOME/Projekty-linux/ansible"
-_add2env PROJECT_PATHS "$HOME/Projekty-linux/forki"
-_add2env PROJECT_PATHS "$HOME/Projekty-linux/inne"
-_add2env PROJECT_PATHS "$HOME/AUR/all"
-_add2env PROJECT_PATHS "$HOME/AUR/new"
-_add2env PROJECT_PATHS "$HOME/AUR/broken"
+_add2env PROJECT_PATHS ~/Projects
+_add2env PROJECT_PATHS ~/Projects-lsy
