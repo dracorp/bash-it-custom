@@ -1,9 +1,12 @@
 if type brew &>/dev/null; then
+    _add2env PATH "/usr/local/sbin"
+    export HOMEBREW_NO_INSTALL_CLEANUP=1
     export HOMEBREW_NO_AUTO_UPDATE=1
     export HOMEBREW_NO_ANALYTICS=1
     export HOMEBREW_LOGS=$HOME/log
     # export HOMEBREW_CURL_VERBOSE=1
     # export HOMEBREW_VERBOSE=1
+    # HOMEBREW_CACHE=~/Library/Caches/Homebrew
 
     # Aliases
     alias brewp='brew pin'
@@ -14,7 +17,7 @@ if type brew &>/dev/null; then
     alias bubo='brew update && brew outdated'
     alias bubc='brew upgrade && brew cleanup'
     alias bubu='bubo && bubc'
-    #
+    # install & uninstall
     alias bri='brew install'
     alias brfi=bri
     alias bru='brew uninstall'
@@ -27,6 +30,9 @@ if type brew &>/dev/null; then
     #
     alias brci='brew cask install'
     alias brcu='brew cask uninstall'
+
+    # brew upgrade all
+    alias bruall='bubu; bcrbc'
 
     alias brs='brew search'
     alias brsd='brew search --desc'
@@ -41,9 +47,9 @@ if type brew &>/dev/null; then
         fi
     done
 
-    function brew() {
-        echo "+ brew $@" >&2
-        command brew $@
-    }
+#     function brew() {
+#         echo "+ brew $@" >&2
+#         command brew $@
+#     }
 fi
 

@@ -36,11 +36,8 @@ if which kubectl &>/dev/null; then
         complete -o default -o nospace -F __start_kubectl k
     fi
 
-    function kubectl() {
-        echo "+ kubectl $@" >&2
-        command kubectl $@
-    }
-else
-    echo 'kubectl package is not installed. Please install it: `brew install kubectl`'
-    return
+#     function kubectl() {
+#         echo "+ kubectl $@" 1>&2
+#         command kubectl $@
+#     }
 fi

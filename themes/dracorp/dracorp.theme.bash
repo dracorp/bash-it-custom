@@ -1,13 +1,16 @@
 # git theming
-SCM_THEME_PROMPT_DIRTY="${bold_red} ✗${reset_color}"
-SCM_THEME_PROMPT_CLEAN="${green} ✓${reset_color}"
-SCM_THEME_PROMPT_PREFIX=" ("
-SCM_THEME_PROMPT_SUFFIX=")"
-# SCM_GIT_SHOW_CURRENT_USER=true
-SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=true}
+# SCM_THEME_PROMPT_DIRTY="${bold_red} x${reset_color}"
+# SCM_THEME_PROMPT_CLEAN="${green} v${reset_color}"
+# SCM_THEME_PROMPT_PREFIX=" |"
+# SCM_THEME_PROMPT_SUFFIX="| "
+# SCM_THEME_BRANCH_TRACK_PREFIX=' > '
+# SCM_THEME_BRANCH_GONE_PREFIX=' < '
+# SCM_THEME_CURRENT_USER_PREFFIX=' :) '
+# SCM_GIT_AHEAD_CHAR="^"
+# SCM_GIT_BEHIND_CHAR="v"
 
 function _git-remote-info {
-  [[ "$(_git-upstream)" == "" ]] && return
+  [[ "$(_git-upstream)" == "" ]] && return || true
 
   local same_branch_name=false
 #   [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true
@@ -34,22 +37,29 @@ function _git-remote-info {
 
 function prompt_command() {
     local EXIT="$?"             # This needs to be first
+    local PS1_WORKDIR="\w"
+    local PS1_HOSTNAME="\H"
+    local PS1_USER="\u"
 
-    if [ "$(whoami)" = root ]; then no_color=$red; else no_color=$white; fi
 
     if [ $EUID -ne 0 ]; then
         prompt="${green}"
     else
-        prompt="${red}"
+        prompt="${orange}"
     fi
     if [ $EXIT != 0 ]; then
         prompt_color=$bold_red
     else
         prompt_color=$green
     fi
-    prompt+="\u${white}@\H${normal}:\w ${white}"
-    prompt+="$(scm_prompt_info)"
-    prompt+=" ${prompt_color}${EXIT}${normal}\n"
+    prompt+="${PS1_USER}${normal}@${bold_white}${PS1_HOSTNAME}${normal}:${PS1_WORKDIR}${white}"
+    prompt+=" $(__kube_ps1)"
+    if [[ $(uname) == @(Linux|Darwin) ]]; then
+        prompt+=" $(scm_prompt_info)"
+    fi
+    # exit code
+    prompt+="\n${prompt_color}${EXIT}${normal} "
+    # type of user
     if [ $EUID -ne 0 ]; then
         prompt+='$'
     else
@@ -63,4 +73,26 @@ function prompt_command() {
     PS4='|${BASH_SOURCE} ${LINENO}${FUNCNAME[0]:+ ${FUNCNAME[0]}()}|  '
 }
 
+__kube_ps1() {
+    CONTEXT=$(kubectl config current-context)
+    NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
+    if [ -z "$NAMESPACE" ]; then
+        NAMESPACE="default"
+    fi
+    if [ -n "$CONTEXT" ]; then
+        case "$CONTEXT" in
+          *prod*)
+            echo "${red}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+            ;;
+          *test*)
+            echo "${yellow}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+            ;;
+          *)
+            echo "${normal}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+            ;;
+        esac
+    fi
+}
+
+# export PROMPT_COMMAND='PS1="${GREEN}${PS1_USER}@${PS1_HOSTNAME}${NORMAL}:$(__kube_ps1)${BLUE}${PS1_WORKDIR}${NORMAL}\$ "'
 safe_append_prompt_command prompt_command

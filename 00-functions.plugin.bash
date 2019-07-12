@@ -1,4 +1,4 @@
-function gi() { #{{{
+function gi() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gi
 #   DESCRIPTION:  Install a grunt plugin and save to devDependencies
@@ -6,9 +6,9 @@ function gi() { #{{{
 #       RETURNS:
 #-------------------------------------------------------------------------------
   npm install --save-dev grunt-"$@"
-} #}}}
+}
 
-function gci() { #{{{
+function gci() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gci
 #   DESCRIPTION:  Install a grunt-contrib plugin and save to devDependencies
@@ -16,19 +16,19 @@ function gci() { #{{{
 #       RETURNS:
 #-------------------------------------------------------------------------------
   npm install --save-dev grunt-contrib-"$@"
-} #}}}
+}
 
-cdd(){ #{{{
+cdd() {
     local DIR
     if [ -f "$1" ]; then
         DIR=$(dirname "$1")
     elif [ -d "$1" ]; then
         DIR=$1
     fi
-cd $DIR
-} #}}}
+    cd $DIR
+}
 
-lsmod(){ #{{{
+lsmod() {
     local LSMOD
     LSMOD=$(which /bin/lsmod)
     if (( $? )); then
@@ -54,13 +54,13 @@ lsmod(){ #{{{
       ;;
     esac
   fi
-} #}}}
+}
 
-ipaddr(){ #{{{
+ipaddr() {
     ip addr show $1 | awk '/inet\>/ {print $2}'
-} #}}}
+}
 
-aa_mod_parameters (){ #{{{
+aa_mod_parameters () {
     N=/dev/null;
     C=`tput op` O=$(echo -en "\n`tput setaf 2`>>> `tput op`");
     for mod in $(cat /proc/modules|cut -d" " -f1);
@@ -80,9 +80,9 @@ aa_mod_parameters (){ #{{{
             echo;
         done;
     done
-} #}}}
+}
 
-join() { #{{{
+join() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME: join
 #   DESCRIPTION: join arguments with first parameter as delimited
@@ -92,7 +92,7 @@ join() { #{{{
     local IFS="$1"
     shift
     echo "$*"
-} # }}}
+}
 
 enable-bracketed-mode() {
     printf "\e[?2004h"
@@ -138,3 +138,4 @@ killfg() {
         kill -9 $PIDS
     fi
 }
+
