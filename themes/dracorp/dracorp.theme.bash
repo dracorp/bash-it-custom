@@ -74,23 +74,25 @@ function prompt_command() {
 }
 
 __kube_ps1() {
-    CONTEXT=$(kubectl config current-context)
-    NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
-    if [ -z "$NAMESPACE" ]; then
-        NAMESPACE="default"
-    fi
-    if [ -n "$CONTEXT" ]; then
-        case "$CONTEXT" in
-          *prod*)
-            echo "${red}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
-            ;;
-          *test*)
-            echo "${yellow}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
-            ;;
-          *)
-            echo "${normal}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
-            ;;
-        esac
+    if which kubectl &>/dev/null; then
+        CONTEXT=$(kubectl config current-context)
+        NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
+        if [ -z "$NAMESPACE" ]; then
+            NAMESPACE="default"
+        fi
+        if [ -n "$CONTEXT" ]; then
+            case "$CONTEXT" in
+            *prod*)
+                echo "${red}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                ;;
+            *test*)
+                echo "${yellow}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                ;;
+            *)
+                echo "${normal}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                ;;
+            esac
+        fi
     fi
 }
 

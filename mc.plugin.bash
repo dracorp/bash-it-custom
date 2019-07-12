@@ -1,7 +1,7 @@
 _uname=$(uname)
 if [[ $_uname = Linux ]]; then
     if [[ -r /usr/libexec/mc/mc-wrapper.sh ]]; then
-        . /usr/libexec/mc/mc-wrapper.sh
+        alias mc='. /usr/libexec/mc/mc-wrapper.sh'
     elif [[ -r /usr/lib/mc/mc-wrapper.sh ]]; then
         alias mc='. /usr/lib/mc/mc-wrapper.sh'
     fi
