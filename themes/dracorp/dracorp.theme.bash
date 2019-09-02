@@ -75,21 +75,25 @@ function prompt_command() {
 
 __kube_ps1() {
     if which kubectl &>/dev/null; then
-        CONTEXT=$(kubectl config current-context)
-        NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
-        if [ -z "$NAMESPACE" ]; then
-            NAMESPACE="default"
+#         CURRENT_CONTEXT=$(kubectl config current-context)
+        CURRENT_CONTEXT=$(yq read ~/.kube/config current-context)
+#         VIA_NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CURRENT_CONTEXT}\")].context.namespace}")
+        VIA_NAMESPACE=$(yq read ~/.kube/config 'contexts[*].context' | grep -w $CURRENT_CONTEXT -A1 | awk '/namespace/ {print $2}')
+        AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
+        if [ -z "$VIA_NAMESPACE" ]; then
+            VIA_NAMESPACE="default"
         fi
-        if [ -n "$CONTEXT" ]; then
-            case "$CONTEXT" in
+        local kube_prompt="${bold_white}☁ Azure:${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}⎈ k8s:${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
+        if [ -n "$CURRENT_CONTEXT" ]; then
+            case "$CURRENT_CONTEXT" in
             *prod*)
-                echo "${red}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                echo "${red}${kube_prompt}${normal}"
                 ;;
             *test*)
-                echo "${yellow}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                echo "${yellow}${kube_prompt}${normal}"
                 ;;
             *)
-                echo "${normal}⎈ ${CONTEXT}:${NAMESPACE}${normal}"
+                echo "${normal}${kube_prompt}${normal}"
                 ;;
             esac
         fi

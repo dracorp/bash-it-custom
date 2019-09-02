@@ -139,3 +139,23 @@ killfg() {
     fi
 }
 
+listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
+}
+listening1() {
+    printf "\nchecking established connections\n\n"
+    for i in $(sudo lsof -i -n -P | grep TCP | grep ESTABLISHED | grep -v IPv6 | grep -v 127.0.0.1 | cut -d ">" -f2 | cut -d " " -f1 | cut -d ":" -f1); do
+        printf "$i : "
+        curl freegeoip.net/xml/$i -s -S | grep CountryName | cut -d ">" -f2 | cut -d"<" -f1
+    done
+
+    printf "\ndisplaying listening ports\n\n"
+
+    sudo lsof -i -n -P | grep TCP | grep LISTEN | cut -d " " -f 1,32-35
+}
