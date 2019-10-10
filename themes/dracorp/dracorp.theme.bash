@@ -39,19 +39,19 @@ function prompt_command() {
     if [ "$(whoami)" = root ]; then no_color=$red; else no_color=$white; fi
 
     if [ $EUID -ne 0 ]; then
-        prompt="${green}"
+        USER_COLOR="${green}"
     else
-        prompt="${red}"
+        USER_COLOR="${red}"
     fi
     if [ $EXIT != 0 ]; then
-        prompt_color=$bold_red
+        EXIT_COLOR=$bold_red
     else
-        prompt_color=$green
+        EXIT_COLOR=$green
     fi
     prompt="$USER_COLOR"
     prompt+="\u${white}@\H${normal}:\w ${white}"
     prompt+="$(scm_prompt_info)"
-    prompt+=" ${prompt_color}${EXIT}${normal}\n"
+    prompt+=" | ${white_bold}EXIT: ${EXIT_COLOR}${EXIT}${normal}\n"
     if [ $EUID -ne 0 ]; then
         prompt+='$'
     else
