@@ -34,6 +34,7 @@ function _git-remote-info {
 
 function prompt_command() {
     local EXIT="$?"             # This needs to be first
+    local EXIT_COLOR USER_COLOR
 
     if [ "$(whoami)" = root ]; then no_color=$red; else no_color=$white; fi
 
@@ -47,6 +48,7 @@ function prompt_command() {
     else
         prompt_color=$green
     fi
+    prompt="$USER_COLOR"
     prompt+="\u${white}@\H${normal}:\w ${white}"
     prompt+="$(scm_prompt_info)"
     prompt+=" ${prompt_color}${EXIT}${normal}\n"
