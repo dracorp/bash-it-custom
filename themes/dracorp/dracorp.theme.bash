@@ -1,8 +1,13 @@
-# git theming
+# for non-unicode
 # SCM_THEME_PROMPT_DIRTY="${bold_red} x${reset_color}"
 # SCM_THEME_PROMPT_CLEAN="${green} v${reset_color}"
-# SCM_THEME_PROMPT_PREFIX=" |"
-# SCM_THEME_PROMPT_SUFFIX="| "
+# for unicode
+SCM_THEME_PROMPT_DIRTY="${bold_red} ✗${reset_color}"
+SCM_THEME_PROMPT_CLEAN="${green} ✓${reset_color}"
+# SCM_GIT_SHOW_CURRENT_USER=true
+SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=true}
+SCM_THEME_PROMPT_PREFIX="| ${bold_white}Git:${normal}"
+SCM_THEME_PROMPT_SUFFIX=""
 # SCM_THEME_BRANCH_TRACK_PREFIX=' > '
 # SCM_THEME_BRANCH_GONE_PREFIX=' < '
 # SCM_THEME_CURRENT_USER_PREFFIX=' :) '
@@ -13,7 +18,6 @@ function _git-remote-info {
   [[ "$(_git-upstream)" == "" ]] && return || true
 
   local same_branch_name=false
-#   [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true
   if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "$(_git-num-remotes)" -ge 2 ]]) ||
       [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
     if [[ "${same_branch_name}" != "true" ]]; then
@@ -37,30 +41,30 @@ function _git-remote-info {
 
 function prompt_command() {
     local EXIT="$?"             # This needs to be first
+    echo "EXIT:$EXIT"
     local PS1_WORKDIR="\w"
     local PS1_HOSTNAME="\H"
     local PS1_USER="\u"
+    local USER_COLOR EXIT_COLOR
 
 
     if [ $EUID -ne 0 ]; then
         prompt="${green}"
     else
-        prompt="${orange}"
+        prompt="${red}"
     fi
     if [ $EXIT != 0 ]; then
-        prompt_color=$bold_red
+        EXIT_COLOR=$bold_red
     else
-        prompt_color=$green
+        EXIT_COLOR=$green
     fi
     prompt+="${PS1_USER}${normal}@${bold_white}${PS1_HOSTNAME}${normal}:${PS1_WORKDIR}${white}"
     prompt+=" $(__kube_ps1)"
     if [[ $(uname) =~ Linux|Darwin ]]; then
         prompt+=" $(scm_prompt_info)"
     fi
-    # exit code
+    prompt+=" | ${bold_white}EXIT:${EXIT_COLOR}${EXIT}${normal} "
     prompt+="\n"
-#     prompt+="${prompt_color}${EXIT}${normal} "
-    # type of user
     if [ $EUID -ne 0 ]; then
         prompt+='$'
     else
@@ -75,26 +79,33 @@ function prompt_command() {
 }
 
 __kube_ps1() {
-    if which kubectl &>/dev/null; then
-#         CURRENT_CONTEXT=$(kubectl config current-context)
-        CURRENT_CONTEXT=$(yq read ~/.kube/config current-context)
-#         VIA_NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CURRENT_CONTEXT}\")].context.namespace}")
-        VIA_NAMESPACE=$(yq read ~/.kube/config 'contexts[*].context' | grep -w $CURRENT_CONTEXT -A1 | awk '/namespace/ {print $2}')
-        AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
+    if which kubectl &>/dev/null && [[ -f ~/.kube/.config ]]; then
+        if which yq &>/dev/null; then
+            CURRENT_CONTEXT=$(yq read ~/.kube/config current-context)
+            VIA_NAMESPACE=$(yq read ~/.kube/config 'contexts[*].context' | grep -w $CURRENT_CONTEXT -A1 | awk '/namespace/ {print $2}')
+        else
+            CURRENT_CONTEXT=$(kubectl config current-context)
+            VIA_NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CURRENT_CONTEXT}\")].context.namespace}")
+        fi
+        if which jq &>/dev/nul && [[ -f ~/.azure/azureProfile.json ]]; then
+            AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
+        else
+            AZURE_CURRENT_SUBSCRIPTION='Unknown!'
+        fi
         if [ -z "$VIA_NAMESPACE" ]; then
             VIA_NAMESPACE="default"
         fi
-        local kube_prompt="${bold_white}☁ Azure:${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}⎈ K8s:${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
+        local kube_prompt="${bold_white}\u2601 Azure: ${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}\u2388 K8s: ${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
         if [ -n "$CURRENT_CONTEXT" ]; then
             case "$CURRENT_CONTEXT" in
             *prod*)
-                echo "${red}${kube_prompt}${normal}"
+                echo -e "| ${red}${kube_prompt}${normal}"
                 ;;
             *test*)
-                echo "${yellow}${kube_prompt}${normal}"
+                echo -e "| ${yellow}${kube_prompt}${normal}"
                 ;;
             *)
-                echo "${normal}${kube_prompt}${normal}"
+                echo -e "| ${normal}${kube_prompt}${normal}"
                 ;;
             esac
         fi
