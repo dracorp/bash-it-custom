@@ -21,6 +21,6 @@ if [ -r /etc/ssl/certs/CACompany.pem ]; then
     # it conflicts with az command
 #     export REQUESTS_CA_BUNDLE=/etc/ssl/certs/CACompany.pem
 fi
-export PYTHONWARNINGS="ignore"
+# export PYTHONWARNINGS="ignore"
 # for decryption, MITM
 # export PYTHONHTTPSVERIFY=0

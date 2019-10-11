@@ -54,11 +54,12 @@ function prompt_command() {
     fi
     prompt+="${PS1_USER}${normal}@${bold_white}${PS1_HOSTNAME}${normal}:${PS1_WORKDIR}${white}"
     prompt+=" $(__kube_ps1)"
-    if [[ $(uname) == @(Linux|Darwin) ]]; then
+    if [[ $(uname) =~ Linux|Darwin ]]; then
         prompt+=" $(scm_prompt_info)"
     fi
     # exit code
-    prompt+="\n${prompt_color}${EXIT}${normal} "
+    prompt+="\n"
+#     prompt+="${prompt_color}${EXIT}${normal} "
     # type of user
     if [ $EUID -ne 0 ]; then
         prompt+='$'
@@ -83,7 +84,7 @@ __kube_ps1() {
         if [ -z "$VIA_NAMESPACE" ]; then
             VIA_NAMESPACE="default"
         fi
-        local kube_prompt="${bold_white}☁ Azure:${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}⎈ k8s:${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
+        local kube_prompt="${bold_white}☁ Azure:${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}⎈ K8s:${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
         if [ -n "$CURRENT_CONTEXT" ]; then
             case "$CURRENT_CONTEXT" in
             *prod*)

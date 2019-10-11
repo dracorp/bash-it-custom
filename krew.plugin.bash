@@ -1,1 +1,1 @@
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+_add2env PATH $HOME/.krew/bin
