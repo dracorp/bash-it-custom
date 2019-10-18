@@ -24,3 +24,4 @@ fi
 # export PYTHONWARNINGS="ignore"
 # for decryption, MITM
 # export PYTHONHTTPSVERIFY=0
+alias pip=pip3

@@ -18,7 +18,7 @@ function _git-remote-info {
   [[ "$(_git-upstream)" == "" ]] && return || true
 
   local same_branch_name=false
-  if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "$(_git-num-remotes)" -ge 2 ]]) ||
+  if ( [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "$(_git-num-remotes)" -ge 2 ]] ) ||
       [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
     if [[ "${same_branch_name}" != "true" ]]; then
       remote_info="\$(_git-upstream)"
@@ -41,25 +41,24 @@ function _git-remote-info {
 
 function prompt_command() {
     local EXIT="$?"             # This needs to be first
-    echo "EXIT:$EXIT"
-    local PS1_WORKDIR="\w"
-    local PS1_HOSTNAME="\H"
-    local PS1_USER="\u"
-    local USER_COLOR EXIT_COLOR
-
+    PS1_WORKDIR="\w"
+    PS1_HOSTNAME="\H"
+    PS1_USER="\u"
 
     if [ $EUID -ne 0 ]; then
-        prompt="${green}"
+        USER_COLOR="${green}"
     else
-        prompt="${red}"
+        USER_COLOR="${red}"
     fi
     if [ $EXIT != 0 ]; then
         EXIT_COLOR=$bold_red
     else
         EXIT_COLOR=$green
     fi
+    prompt="$USER_COLOR"
     prompt+="${PS1_USER}${normal}@${bold_white}${PS1_HOSTNAME}${normal}:${PS1_WORKDIR}${white}"
-    prompt+=" $(__kube_ps1)"
+    prompt+="$(__kube_ps1)"
+    prompt+="$(__azure_ps1)"
     if [[ $(uname) =~ Linux|Darwin ]]; then
         prompt+=" $(scm_prompt_info)"
     fi
@@ -79,38 +78,42 @@ function prompt_command() {
 }
 
 __kube_ps1() {
-    if which kubectl &>/dev/null && [[ -f ~/.kube/.config ]]; then
-        if which yq &>/dev/null; then
+    if command -v kubectl &>/dev/null && [[ -f ~/.kube/config ]]; then
+        if command -v yq &>/dev/null; then
             CURRENT_CONTEXT=$(yq read ~/.kube/config current-context)
-            VIA_NAMESPACE=$(yq read ~/.kube/config 'contexts[*].context' | grep -w $CURRENT_CONTEXT -A1 | awk '/namespace/ {print $2}')
+            VIA_NAMESPACE=$(yq read ~/.kube/config 'contexts[*].context' | grep -w "$CURRENT_CONTEXT" -A1 | awk '/namespace/ {print $2}')
         else
             CURRENT_CONTEXT=$(kubectl config current-context)
             VIA_NAMESPACE=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"${CURRENT_CONTEXT}\")].context.namespace}")
         fi
-        if which jq &>/dev/nul && [[ -f ~/.azure/azureProfile.json ]]; then
-            AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
-        else
-            AZURE_CURRENT_SUBSCRIPTION='Unknown!'
-        fi
-        if [ -z "$VIA_NAMESPACE" ]; then
-            VIA_NAMESPACE="default"
-        fi
-        local kube_prompt="${bold_white}\u2601 Azure: ${normal}${AZURE_CURRENT_SUBSCRIPTION} | ${bold_white}\u2388 K8s: ${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
+        local kube_prompt="${bold_white}\u2388 K8s: ${normal}${CURRENT_CONTEXT}:${VIA_NAMESPACE}"
         if [ -n "$CURRENT_CONTEXT" ]; then
             case "$CURRENT_CONTEXT" in
             *prod*)
-                echo -e "| ${red}${kube_prompt}${normal}"
+                echo -e " | ${red}${kube_prompt}${normal}"
                 ;;
             *test*)
-                echo -e "| ${yellow}${kube_prompt}${normal}"
+                echo -e " | ${yellow}${kube_prompt}${normal}"
                 ;;
             *)
-                echo -e "| ${normal}${kube_prompt}${normal}"
+                echo -e " | ${normal}${kube_prompt}${normal}"
                 ;;
             esac
         fi
     fi
 }
+__azure_ps1() {
+    if command -v jq &>/dev/null && [[ -f ~/.azure/azureProfile.json ]]; then
+        AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
+    else
+        AZURE_CURRENT_SUBSCRIPTION='Unknown!'
+    fi
+    if [ -z "$VIA_NAMESPACE" ]; then
+        VIA_NAMESPACE="default"
+    fi
+    local azure_prompt="${bold_white}\u2601 Azure: ${normal}${AZURE_CURRENT_SUBSCRIPTION}"
+    echo -e " | ${azure_prompt}"
 
+}
 # export PROMPT_COMMAND='PS1="${GREEN}${PS1_USER}@${PS1_HOSTNAME}${NORMAL}:$(__kube_ps1)${BLUE}${PS1_WORKDIR}${NORMAL}\$ "'
 safe_append_prompt_command prompt_command

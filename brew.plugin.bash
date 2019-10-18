@@ -26,13 +26,14 @@ if type brew &>/dev/null; then
     # Casks
     alias bubco='brew update && brew cask outdated'
     alias bcrbc='brew cask reinstall $(brew cask outdated) && brew cleanup'
+    alias bcupbc='brew cask upgrade --greedy && brew cleanup'
     alias bubcu='bcubco && bcrbc'
     #
     alias brci='brew cask install'
     alias brcu='brew cask uninstall'
 
     # brew upgrade all
-    alias bruall='bubu; bcrbc'
+    alias bruall='bubu; bcupbc'
 
     alias brs='brew search'
     alias brsd='brew search --desc'
