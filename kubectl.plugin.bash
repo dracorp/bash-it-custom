@@ -40,4 +40,6 @@ if which kubectl &>/dev/null; then
 #         echo "+ kubectl $@" 1>&2
 #         command kubectl $@
 #     }
+    alias kubectl-podsOnNodes='kubectl get pod -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name,STATUS:.status.phase --all-namespaces'
+#     alias kubectl-podOnNodes2='kubectl get pod -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name --all-namespaces'
 fi

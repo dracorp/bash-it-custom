@@ -26,11 +26,11 @@ alias lla='ls -la'
 alias h='fc -l' #history
 alias j='jobs'
 
-if which less 1>/dev/null 2>&1; then
-    alias perldoc='PAGER="less" perldoc'
-else
-    alias perldoc='PAGER="" perldoc'
-fi
+# if which less 1>/dev/null 2>&1; then
+#     alias perldoc='PAGER="less" perldoc'
+# else
+#     alias perldoc='PAGER="" perldoc'
+# fi
 
 # replace cat with vimcat
 alias vcat='$HOME/bin/vimcat'
