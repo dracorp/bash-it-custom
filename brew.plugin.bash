@@ -85,3 +85,5 @@ installed with, plus any appended brew formula options."
     }
 fi
 
+export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
+
