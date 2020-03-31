@@ -1,1 +1,1 @@
-export LANG=pl_PL.utf8
+export LANG=pl_PL.UTF-8

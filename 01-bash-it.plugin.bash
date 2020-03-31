@@ -7,6 +7,26 @@ function k8s_context_prompt {
     echo -e "$(kubectl config current-context):${kube_namespace}"
 }
 
+# Helper function loading various enable-able files
+function _load_bash_it_files() {
+
+  subdirectory="$1"
+
+  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]
+  then
+    continue
+  fi
+  FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
+  for config_file in $FILES
+  do
+    echo ${config_file}
+
+    if [ -e "${config_file}" ]; then
+      time source $config_file
+    fi
+  done
+}
+
 # unalias some default aliases
 if alias q &>/dev/null; then
   unalias q
