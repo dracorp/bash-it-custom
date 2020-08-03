@@ -32,3 +32,4 @@ export HISTSIZE=
 # export HISTFILE=~/.history
 
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export TMOUT=3600
