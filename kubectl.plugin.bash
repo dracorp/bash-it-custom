@@ -1,5 +1,5 @@
 if which kubectl &>/dev/null; then
-    if [[ -n $(basher package-path ahmetb/kubectl-aliases) ]]; then
+    if [[ -d $(basher package-path ahmetb/kubectl-aliases) ]]; then
         . $(basher package-path ahmetb/kubectl-aliases)/.kubectl_aliases
     fi
 

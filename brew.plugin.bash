@@ -1,3 +1,5 @@
+# brew --prefix formula
+# brew --cellar formula
 if type brew &>/dev/null; then
     _add2env PATH "/usr/local/sbin"
     export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -9,9 +11,10 @@ if type brew &>/dev/null; then
     # HOMEBREW_CACHE=~/Library/Caches/Homebrew
 
     # Aliases
-    alias brewp='brew pin'
-    alias brews='brew list -1'
-    alias brewsp='brew list --pinned'
+    alias br='brew'
+    alias brp='brew pin'
+    alias brl='brew list -1'
+    alias brlp='brew list --pinned'
 
     # Formulae
     alias bubo='brew update && brew outdated'
@@ -19,6 +22,7 @@ if type brew &>/dev/null; then
     alias bubu='bubo && bubc'
     # install & uninstall
     alias bri='brew install'
+    alias brI='brew info'
     alias brfi=bri
     alias bru='brew uninstall'
     alias brfu=bru

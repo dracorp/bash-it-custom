@@ -24,4 +24,11 @@ export HISTIGNORE=' *:exit:cd *'
 # export HISTSIZE=1000
 
 # format daty dla wpisow w history, domyslnie brak, man date
-export HISTTIMEFORMAT="%F %T "
+# export HISTTIMEFORMAT="%F %T "
+export HISTTIMEFORMAT="[%F %T] "
+
+export HISTFILESIZE=
+export HISTSIZE=
+# export HISTFILE=~/.history
+
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
