@@ -12,8 +12,7 @@ function _load_bash_it_files() {
 
   subdirectory="$1"
 
-  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]
-  then
+  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]; then
     continue
   fi
   FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
@@ -37,3 +36,4 @@ fi
 if alias k &>/dev/null; then
     unalias k
 fi
+
