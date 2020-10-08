@@ -13,23 +13,17 @@ shopt -s extglob
 # dodawaj do pliku history zamiast go nadpisywac
 shopt -s histappend
 
+# see also hstr.plugin.bash
 # ignoruj duplikaty
-export HISTCONTROL=ignoredups
+# export HISTCONTROL=ignoredups
 # ingoruj wpisy
 export HISTIGNORE=' *:exit:cd *'
-
-# max rozmiar pliku historii
-# export HISTFILESIZE=20000
-# max ilosc pliku history zaladowana do pamieci
-# export HISTSIZE=1000
-
 # format daty dla wpisow w history, domyslnie brak, man date
 # export HISTTIMEFORMAT="%F %T "
 export HISTTIMEFORMAT="[%F %T] "
-
-export HISTFILESIZE=
-export HISTSIZE=
 # export HISTFILE=~/.history
+# PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+export TMOUT=
 
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-export TMOUT=3600
+_rm4env /usr/local/bin
+_add2env PATH=+/usr/local/bin

@@ -19,3 +19,5 @@ fi
 # _add2env LS_COLORS 'ex=00:su=00:sg=00:ca=00' :
 export LC_COLLATE=C
 export LANG=C
+
+. "/Users/u537501/.local/share/lscolors.sh"
