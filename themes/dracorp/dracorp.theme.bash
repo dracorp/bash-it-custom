@@ -14,7 +14,7 @@ SCM_THEME_PROMPT_SUFFIX=""
 # SCM_GIT_AHEAD_CHAR="^"
 # SCM_GIT_BEHIND_CHAR="v"
 
-function _git-remote-info {
+_git-remote-info {
   [[ "$(_git-upstream)" == "" ]] && return || true
 
   local same_branch_name=false
@@ -39,7 +39,7 @@ function _git-remote-info {
   fi
 }
 
-function prompt_command() {
+prompt_command() {
     local EXIT="$?"             # This needs to be first
     PS1_WORKDIR="\w"
     PS1_HOSTNAME="\H"
@@ -92,7 +92,7 @@ __kube_ps1() {
             *prod*)
                 echo -e " | ${red}${kube_prompt}${normal}"
                 ;;
-            *test*)
+            *test|dev*)
                 echo -e " | ${yellow}${kube_prompt}${normal}"
                 ;;
             *)
