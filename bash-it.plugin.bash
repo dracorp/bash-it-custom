@@ -3,10 +3,12 @@ k8s_context_prompt() {
     if which kubectl &>/dev/null; then
         local kube_namespace=''
         kube_namespace="$(command kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
-        if [ -z "$kube_namespace" ]; then
-            kube_namespace='default'
+        if [[ $? -eq 0 ]]; then
+            if [ -z "$kube_namespace" ]; then
+                kube_namespace='default'
+            fi
+            echo -e "$(command kubectl config current-context 2>/dev/null):${kube_namespace}"
         fi
-        echo -e "$(command kubectl config current-context 2>/dev/null):${kube_namespace}"
     fi
 }
 
@@ -14,7 +16,7 @@ azure_context_prompt() {
     if type jq > /dev/null && [[ -f ~/.azure/azureProfile.json ]]; then
         AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
     else
-        AZURE_CURRENT_SUBSCRIPTION='Unknown!'
+        AZURE_CURRENT_SUBSCRIPTION=''
     fi
     echo "$AZURE_CURRENT_SUBSCRIPTION"
 }
@@ -22,6 +24,7 @@ azure_context_prompt() {
 # \u2601
 AZURE_CONTEXT_THEME_CHAR=${POWERLINE_AZURE_CONTEXT_CHAR:="☁ "}
 AZURE_CONTEXT_THEME_PROMPT_COLOR=${POWERLINE_AZURE_CONTEXT_COLOR:=30}
+HOST_THEME_PROMPT_COLOR=${POWERLINE_HOST_COLOR:=10}
 
 __powerline_azure_context_prompt() {
     local azure_context=''
