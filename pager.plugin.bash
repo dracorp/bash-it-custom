@@ -1,3 +1,5 @@
-# vim as pager
-export PAGER=vimpager
+export PAGER
+# PAGER=less
+PAGER=vimpager
+# PERLDOC_PAGER=vimpager
 
