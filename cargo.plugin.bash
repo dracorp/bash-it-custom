@@ -1,1 +1,1 @@
-_add2env PATH /Users/u537501/.cargo/bin
+_add2env PATH $HOME/.cargo/bin

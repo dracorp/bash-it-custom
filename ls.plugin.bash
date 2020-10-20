@@ -1,6 +1,14 @@
 if which dircolors 1>/dev/null 2>&1; then
-     test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
+    test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
 fi
+
+alias lt='ls -lt | head -25'
+
+alias l='ls -F'
+alias ls='ls -F'
+alias ll='ls -l'
+alias la='ls -la'
+alias lla='ls -la'
 
 if [[ $(uname) = Linux || $(which ls | grep -v alias | xargs dirname) = /usr/local/opt/coreutils/libexec/gnubin ]]; then
     alias ls='ls -Fh --group-directories-first --color=auto --time-style="+%Y-%m-%d %H:%M:%S"'

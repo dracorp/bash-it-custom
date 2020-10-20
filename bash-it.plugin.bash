@@ -25,6 +25,12 @@ azure_context_prompt() {
 AZURE_CONTEXT_THEME_CHAR=${POWERLINE_AZURE_CONTEXT_CHAR:="☁ "}
 AZURE_CONTEXT_THEME_PROMPT_COLOR=${POWERLINE_AZURE_CONTEXT_COLOR:=30}
 HOST_THEME_PROMPT_COLOR=${POWERLINE_HOST_COLOR:=10}
+if [[ $EUID -eq 0 ]]; then
+    PROMPT_CHAR='#'
+else
+    PROMPT_CHAR='$'
+fi
+POWERLINE_COMPACT=1
 
 __powerline_azure_context_prompt() {
     local azure_context=''
@@ -38,6 +44,25 @@ __powerline_azure_context_prompt() {
 #         echo -e "${azure_prompt}"
 }
 
+# Helper function loading various enable-able files
+function _load_bash_it_files() {
+
+  subdirectory="$1"
+
+  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]; then
+    continue
+  fi
+  FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
+  for config_file in $FILES
+  do
+    echo ${config_file}
+
+    if [ -e "${config_file}" ]; then
+      time source $config_file
+    fi
+  done
+}
+
 # unalias some default aliases
 if alias q &>/dev/null; then
   unalias q
@@ -47,4 +72,7 @@ if alias cls &>/dev/null; then
 fi
 if alias k &>/dev/null; then
     unalias k
+fi
+if alias nu &>/dev/null; then
+    unalias nu
 fi

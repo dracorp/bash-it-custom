@@ -1,5 +1,13 @@
+# For sudo-ing aliases
+# https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
+alias sudo='sudo '
+alias cp='cp -i'
+alias mv='mv -i'
 alias rm='rm -i'
 alias curl='\curl -k'
+
+alias pman='LANG=pl_PL.UTF-8 man'
+alias eman='LANG=en_GB man'
 
 # access to history via c-p or arrows
 # alias __A=`echo "\020"` # ^p up
@@ -9,32 +17,16 @@ alias curl='\curl -k'
 # alias __H=`echo "\001"` # ^a start of line
 # alias __Y=`echo "\005"` # ^e end of line
 
-#alias cklido='/lido_apps/lido/lido_admin/SYSCheck/check_lido_processes.ksh'
-# alias ct='cleartool $*'
-# alias mt='multitool $*'
-
-# don't use vi or ex
-alias ex='vim'
-alias vi='vim'
-
-alias l='ls -F'
-alias ls='ls -F'
-alias ll='ls -l'
-alias la='ls -la'
-alias lla='ls -la'
 
 alias h='fc -l' #history
 alias j='jobs'
+alias wget='wget --content-disposition'
 
-# if which less 1>/dev/null 2>&1; then
-#     alias perldoc='PAGER="less" perldoc'
-# else
-#     alias perldoc='PAGER="" perldoc'
-# fi
+if which ipcalc &>/dev/null; then
+    alias ipcalc='ipcalc -n'
+fi
 
-# replace cat with vimcat
-alias vcat='$HOME/bin/vimcat'
+[ -x /usr/bin/dcfldd ] && alias dd=dcfldd
 
-alias lt='ls -lt | head -25'
 #--show-nonprinting'
 alias cat='cat -v'

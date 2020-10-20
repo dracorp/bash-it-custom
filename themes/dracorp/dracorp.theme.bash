@@ -14,7 +14,7 @@ SCM_THEME_PROMPT_SUFFIX=""
 # SCM_GIT_AHEAD_CHAR="^"
 # SCM_GIT_BEHIND_CHAR="v"
 
-_git-remote-info {
+_git-remote-info() {
   [[ "$(_git-upstream)" == "" ]] && return || true
 
   local same_branch_name=false
@@ -41,6 +41,7 @@ _git-remote-info {
 
 prompt_command() {
     local EXIT="$?"             # This needs to be first
+    local EXIT_COLOR USER_COLOR
     PS1_WORKDIR="\w"
     PS1_HOSTNAME="\H"
     PS1_USER="\u"

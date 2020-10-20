@@ -23,3 +23,19 @@ aur-add-remote-origin() {
     echo "Adding remote url '$remoteGitUrl' as origin"
     git remote add origin $remoteGitUrl
 }
+
+aur-commit-update() {
+    if [[ -f PKGBUILD  ]]; then
+        local pkgver=$(makepkg --printsrcinfo | awk '/pkgver/ {print $3}')
+        if [[ -n $pkgver ]]; then
+            INFO 'Creating new .SRCINFO'
+            mksrcinfo
+            INFO 'Adding updated files to the stage'
+            git add -u
+            git commit -m "Upgraded to $pkgver"
+            git push
+        fi
+    else
+        WARN 'Missing PKGBUILD'
+    fi
+}
