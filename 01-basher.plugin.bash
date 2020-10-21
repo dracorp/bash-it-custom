@@ -1,3 +1,4 @@
-_add2env PATH ~/.basher/bin
-. ~/.basher/completions/basher.bash
-eval "$(basher init - bash)"
+if [[ -d ~/.basher ]]; then
+    _add2env PATH $HOME/.basher/bin
+    eval "$(basher init - bash)"
+fi

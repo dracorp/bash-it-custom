@@ -1,4 +1,5 @@
-function gi() { #{{{
+: <<EOC
+gi() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gi
 #   DESCRIPTION:  Install a grunt plugin and save to devDependencies
@@ -6,9 +7,9 @@ function gi() { #{{{
 #       RETURNS:
 #-------------------------------------------------------------------------------
   npm install --save-dev grunt-"$@"
-} #}}}
+}
 
-function gci() { #{{{
+gci() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gci
 #   DESCRIPTION:  Install a grunt-contrib plugin and save to devDependencies
@@ -16,19 +17,20 @@ function gci() { #{{{
 #       RETURNS:
 #-------------------------------------------------------------------------------
   npm install --save-dev grunt-contrib-"$@"
-} #}}}
+}
+EOC
 
-cdd(){ #{{{
+cdd() {
     local DIR
     if [ -f "$1" ]; then
         DIR=$(dirname "$1")
     elif [ -d "$1" ]; then
         DIR=$1
     fi
-cd $DIR
-} #}}}
+    cd $DIR
+}
 
-lsmod(){ #{{{
+lsmod() {
     local LSMOD
     LSMOD=$(which /bin/lsmod)
     if (( $? )); then
@@ -54,13 +56,13 @@ lsmod(){ #{{{
       ;;
     esac
   fi
-} #}}}
+}
 
-ipaddr(){ #{{{
+ipaddr() {
     ip addr show $1 | awk '/inet\>/ {print $2}'
-} #}}}
+}
 
-aa_mod_parameters (){ #{{{
+aa_mod_parameters () {
     N=/dev/null;
     C=`tput op` O=$(echo -en "\n`tput setaf 2`>>> `tput op`");
     for mod in $(cat /proc/modules|cut -d" " -f1);
@@ -80,9 +82,9 @@ aa_mod_parameters (){ #{{{
             echo;
         done;
     done
-} #}}}
+}
 
-join() { #{{{
+join() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME: join
 #   DESCRIPTION: join arguments with first parameter as delimited
@@ -92,7 +94,7 @@ join() { #{{{
     local IFS="$1"
     shift
     echo "$*"
-} # }}}
+}
 
 enable-bracketed-mode() {
     printf "\e[?2004h"
@@ -137,4 +139,25 @@ killfg() {
     if [[ -n $PIDS ]]; then
         kill -9 $PIDS
     fi
+}
+
+listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
+}
+listening1() {
+    printf "\nchecking established connections\n\n"
+    for i in $(sudo lsof -i -n -P | grep TCP | grep ESTABLISHED | grep -v IPv6 | grep -v 127.0.0.1 | cut -d ">" -f2 | cut -d " " -f1 | cut -d ":" -f1); do
+        printf "$i : "
+        curl freegeoip.net/xml/$i -s -S | grep CountryName | cut -d ">" -f2 | cut -d"<" -f1
+    done
+
+    printf "\ndisplaying listening ports\n\n"
+
+    sudo lsof -i -n -P | grep TCP | grep LISTEN | cut -d " " -f 1,32-35
 }
