@@ -1,5 +1,5 @@
 : <<EOC
-function gi() {
+gi() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gi
 #   DESCRIPTION:  Install a grunt plugin and save to devDependencies
@@ -9,7 +9,7 @@ function gi() {
   npm install --save-dev grunt-"$@"
 }
 
-function gci() {
+gci() {
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  gci
 #   DESCRIPTION:  Install a grunt-contrib plugin and save to devDependencies
