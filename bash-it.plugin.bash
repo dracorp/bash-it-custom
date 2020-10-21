@@ -1,3 +1,15 @@
+# Settings for powerline themes
+AZURE_CONTEXT_THEME_CHAR=${POWERLINE_AZURE_CONTEXT_CHAR:="☁ "}
+AZURE_CONTEXT_THEME_PROMPT_COLOR=${POWERLINE_AZURE_CONTEXT_COLOR:=30}
+# HOST_THEME_PROMPT_COLOR=${POWERLINE_HOST_COLOR:=10}
+HOST_THEME_PROMPT_COLOR=32
+POWERLINE_COMPACT=1
+if [[ $EUID -eq 0 ]]; then
+    PROMPT_CHAR='#'
+else
+    PROMPT_CHAR='$'
+fi
+
 # overwrite from $BASH_IT/themes/base.theme.bash
 k8s_context_prompt() {
     if which kubectl &>/dev/null; then
@@ -21,16 +33,6 @@ azure_context_prompt() {
     echo "$AZURE_CURRENT_SUBSCRIPTION"
 }
 
-# \u2601
-AZURE_CONTEXT_THEME_CHAR=${POWERLINE_AZURE_CONTEXT_CHAR:="☁ "}
-AZURE_CONTEXT_THEME_PROMPT_COLOR=${POWERLINE_AZURE_CONTEXT_COLOR:=30}
-HOST_THEME_PROMPT_COLOR=${POWERLINE_HOST_COLOR:=10}
-if [[ $EUID -eq 0 ]]; then
-    PROMPT_CHAR='#'
-else
-    PROMPT_CHAR='$'
-fi
-POWERLINE_COMPACT=1
 
 __powerline_azure_context_prompt() {
     local azure_context=''
@@ -45,22 +47,28 @@ __powerline_azure_context_prompt() {
 }
 
 # Helper function loading various enable-able files
-function _load_bash_it_files() {
+_load_bash_it_files() {
 
-  subdirectory="$1"
+#     subdirectory="$1"
 
-  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]; then
-    continue
-  fi
-  FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
-  for config_file in $FILES
-  do
-    echo ${config_file}
+#     if [ ! -d "${BASH_IT}/enabled" ]; then
+#         continue
+#     fi
+    FILES="${BASH_IT}/enabled/*.bash"
+    for config_file in $FILES; do
+        echo ${config_file}
 
-    if [ -e "${config_file}" ]; then
-      time source $config_file
-    fi
-  done
+        if [ -e "${config_file}" ]; then
+            time source $config_file
+        fi
+    done
+}
+
+__powerline_k8s_prompt() {
+    __powerline_k8s_context_prompt "$@"
+}
+__powerline_azure_prompt() {
+    __powerline_azure_context_prompt "$@"
 }
 
 # unalias some default aliases
