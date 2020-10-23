@@ -54,7 +54,7 @@ _load_bash_it_files() {
 #     if [ ! -d "${BASH_IT}/enabled" ]; then
 #         continue
 #     fi
-    FILES="${BASH_IT}/enabled/*.bash"
+    FILES="${BASH_IT}/enabled/*.bash ${BASH_IT}/custom/*.bash"
     for config_file in $FILES; do
         echo ${config_file}
 
