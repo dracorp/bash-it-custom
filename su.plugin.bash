@@ -1,7 +1,7 @@
 if [ -n "$BASH_VERSION" ] && [ "${BASH_VERSINFO[0]}" -eq 4 ]; then
     unset command_not_found_handle
     command_not_found_handle() {
-        printf "bash: %s: command not found\n" "$1"
+#         printf "bash: %s: command not found\n" "$1"
         case $1 in
             su-*)
                 _user=$( echo "$1" | sed 's/^su-//' )
