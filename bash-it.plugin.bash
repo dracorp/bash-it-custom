@@ -84,3 +84,6 @@ fi
 if alias nu &>/dev/null; then
     unalias nu
 fi
+if alias gu &>/dev/null; then
+    unalias gu
+fi
