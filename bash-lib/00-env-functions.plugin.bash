@@ -22,45 +22,51 @@ function _add2env { #{{{
     typeset value variable separator
     typeset modification=post
 
-    # Checking number of arguments
-    if [ $# -eq 1 ]; then
-        value=${1}
-        variable=PATH
-        separator=:
-    elif [ $# -eq 2 ]; then
-        variable=$1
-        value=$2
-        separator=:
-    else
-        variable=$1
-        value=$2
-        separator=$3
-    fi
-
-    if [ $# -eq 1 ]; then
-        # checking type of modification
-        if [[ $value =~ \+= ]]; then
-        # pre-append to variable
-        # _add2env VARIABLE=+value
+    if [[ $1 =~ = ]]; then
+        if [[ $1 =~ \+= ]]; then
+            # post-append to variable
+            # _add2env VARIABLE+=value
+            # default behaviour
             modification=post
-            variable=${value%+=*}
-            value=${value#*+=}
+            value=${1#*+=}
+            variable=${1%+=*}
             separator=${2:-:}
-        elif [[ $value =~ =\+ ]]; then
-        # append to variable
-        # _add2env VARIABLE+=value
+        elif [[ $1 =~ =\+ ]]; then
+            # pre-append to variable
+            # _add2env VARIABLE=+value
             modification=pre
-            variable=${value%=+*}
-            value=${value#*=+}
+            value=${1#*=+}
+            variable=${1%=+*}
             separator=${2:-:}
-        elif [[ $value =~ = ]]; then
-        # _add2env VARIABLE=value
+        else
+            # _add2env VARIABLE=value
             modification=assign
-            variable=${value%=*}
-            value=${value#*=}
-            separator=${2:-:}
+            value=${1#*=}
+            variable=${1%=*}
+            separator=''
+        fi
+    else
+        # Checking number of arguments
+        if [ $# -eq 1 ]; then
+            value=${1}
+            variable=PATH
+            separator=:
+        elif [ $# -eq 2 ]; then
+            variable=$1
+            value=$2
+            separator=:
+        else
+            variable=$1
+            value=$2
+            separator=$3
         fi
     fi
+
+#     echo "modification:   $modification"
+#     echo "variable:       $variable"
+#     echo "value:          $value"
+#     echo "separator:      $separator"
+#     return
 
     # evaluate tylde
     if [[ $value =~ '~' ]]; then
@@ -77,7 +83,7 @@ function _add2env { #{{{
         if (( DEBUG_DEVEL )); then
             echo eval "$variable=$value" >&2
         fi
-        eval "$variable=$value"
+        eval "$variable=${value// /\\ }"
         # shellcheck disable=SC2163
         export "$variable"
         if (( DEBUG_DEVEL )); then
@@ -88,7 +94,7 @@ function _add2env { #{{{
             if (( DEBUG_DEVEL )); then
                 echo eval "$variable=$value"
             fi
-            eval "$variable=$value"
+            eval "$variable=${value// /\\ }"
         else
             case "$valueOfVariable" in ${value}${separator}* | *${separator}${value}${separator}* | *${separator}${value} | $value )
                     : echo already set
@@ -99,11 +105,11 @@ function _add2env { #{{{
                             if (( DEBUG_DEVEL )); then
                                 echo eval "$variable=${valueOfVariable}${separator}${value}"
                             fi
-                            eval "$variable=${valueOfVariable}${separator}${value}"
+                            eval "$variable=${valueOfVariable// /\\ }${separator// /\\ }${value}"
                             ;;
                         pre)
                             if (( DEBUG_DEVEL )); then
-                                echo eval "$variable=${value}${separator}${valueOfVariable}"
+                                echo eval "$variable=${value}${separator// /\\ }${valueOfVariable// /\\ }"
                             fi
                             eval "$variable=${value}${separator}${valueOfVariable}"
                             ;;
