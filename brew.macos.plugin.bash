@@ -33,7 +33,7 @@ if type brew &>/dev/null; then
     alias bcupbc='brew cask upgrade --greedy && brew cleanup'
     alias bubcu='bcubco && bcrbc'
     #
-    alias brci='brew cask install'
+    alias brci='brew install --cask'
     alias brcu='brew cask uninstall'
 
     # brew upgrade all
@@ -70,23 +70,23 @@ installed with, plus any appended brew formula options."
 #         echo "+ brew $*" >&2
 #         command brew "$@"
 #     }
-    brew() {
-        local _red _reset
-        _red="[1;31m"
-        _reset="[0m"
-        if [[ "$1" =~ ^remove|rm|uninstall$ ]]; then
-            shift 1
-            if [[ -d "/usr/local/Cellar/$1" ]]; then
-                command brew rm "$@"
-            elif [[ -d "/usr/local/Caskroom/$1" ]]; then
-                command brew cask rm "$@"
-            else
-                printf "%b\n" "${_red}Error:${_reset} No such keg nor Cask $1 installed"
-            fi
-        else
-            command brew "$@"
-        fi
-    }
+#     brew() {
+#         local _red _reset
+#         _red="[1;31m"
+#         _reset="[0m"
+#         if [[ "$1" =~ ^remove|rm|uninstall$ ]]; then
+#             shift 1
+#             if [[ -d "/usr/local/Cellar/$1" ]]; then
+#                 command brew rm "$@"
+#             elif [[ -d "/usr/local/Caskroom/$1" ]]; then
+#                 command brew rm  --cask"$@"
+#             else
+#                 printf "%b\n" "${_red}Error:${_reset} No such keg nor Cask $1 installed"
+#             fi
+#         else
+#             command brew "$@"
+#         fi
+#     }
 fi
 
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"

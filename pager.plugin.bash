@@ -1,5 +1,5 @@
 export PAGER
-# PAGER=less
-PAGER=vimpager
+PAGER=less
+# PAGER=vimpager
 # PERLDOC_PAGER=vimpager
 
