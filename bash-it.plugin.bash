@@ -12,7 +12,7 @@ fi
 
 # overwrite from $BASH_IT/themes/base.theme.bash
 k8s_context_prompt() {
-    if which kubectl &>/dev/null; then
+    if _command_exists kubectl; then
         local kube_namespace=''
         kube_namespace="$(command kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
         if [[ $? -eq 0 ]]; then
@@ -25,25 +25,29 @@ k8s_context_prompt() {
 }
 
 azure_context_prompt() {
-    if type jq > /dev/null && [[ -f ~/.azure/azureProfile.json ]]; then
-        AZURE_CURRENT_SUBSCRIPTION=$(jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
-    else
-        AZURE_CURRENT_SUBSCRIPTION=''
+    local AZURE_CURRENT_SUBSCRIPTION=''
+    if _command_exists jq && [[ -f ~/.azure/azureProfile.json ]]; then
+        AZURE_CURRENT_SUBSCRIPTION=$(command jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json 2>/dev/null)
     fi
     echo "$AZURE_CURRENT_SUBSCRIPTION"
 }
 
+__powerline_k8s_prompt() {
+    __powerline_k8s_context_prompt "$@"
+}
 
 __powerline_azure_context_prompt() {
     local azure_context=''
-    if _command_exists jq; then
-        azure_context=$(azure_context_prompt)
-    fi
+    azure_context=$(azure_context_prompt)
     if [[ -n "$azure_context" ]]; then
         echo "${AZURE_CONTEXT_THEME_CHAR}${azure_context}|${AZURE_CONTEXT_THEME_PROMPT_COLOR}"
     fi
 #         local azure_prompt="${bold_white}\u2601 Azure: ${normal}${AZURE_CURRENT_SUBSCRIPTION}"
 #         echo -e "${azure_prompt}"
+}
+
+__powerline_azure_prompt() {
+    __powerline_azure_context_prompt "$@"
 }
 
 # Helper function loading various enable-able files
@@ -62,13 +66,6 @@ _load_bash_it_files() {
             time source $config_file
         fi
     done
-}
-
-__powerline_k8s_prompt() {
-    __powerline_k8s_context_prompt "$@"
-}
-__powerline_azure_prompt() {
-    __powerline_azure_context_prompt "$@"
 }
 
 # unalias some default aliases
