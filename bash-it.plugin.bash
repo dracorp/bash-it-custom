@@ -27,7 +27,7 @@ k8s_context_prompt() {
 azure_context_prompt() {
     local AZURE_CURRENT_SUBSCRIPTION=''
     if _command_exists jq && [[ -f ~/.azure/azureProfile.json ]]; then
-        AZURE_CURRENT_SUBSCRIPTION=$(command jq -r '.subscriptions[] | select(.isDefault==true) | .name' ~/.azure/azureProfile.json 2>/dev/null)
+        AZURE_CURRENT_SUBSCRIPTION=$(command jq -r '.subscriptions[]? | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
     fi
     echo "$AZURE_CURRENT_SUBSCRIPTION"
 }
