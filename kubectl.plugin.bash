@@ -8,9 +8,6 @@ if which kubectl &>/dev/null; then
 
     # get all services with in a cluster and the nodePorts they use (if any)
     alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
-    # shortcuts for frequent kubernetes commands
-    alias kpods="kubectl get po"
-    alias kinspect="kubectl describe"
     function krun() { name=$1; shift; image=$1; shift; kubectl run -it --generator=run-pod/v1 --image $image $name -- $@; }
     function klogs() { kubectl logs $*;}
     function kexec(){ pod=$1; shift; kubectl exec -it $pod -- $@; }
@@ -21,7 +18,6 @@ if which kubectl &>/dev/null; then
     }
 
     # https://docs.microsoft.com/en-us/azure/aks/use-pod-security-policies
-    alias kubectl-admin='kubectl --namespace u537501'
     alias kubectl-nonadminuser='kubectl --as=system:serviceaccount:u537501:noadmin-user --namespace u537501'
 
     # kubectl create serviceaccount --namespace=u537501 noadmin-user
@@ -29,7 +25,6 @@ if which kubectl &>/dev/null; then
     # kubectl-nonadminuser apply -f nginx-unprivileged.yaml
     # kubectl-nonadminuser describe pod nginx-unprivileged
 
-    alias k=kubectl
     if [[ $(type -t compopt) = "builtin" ]]; then
         complete -o default -F __start_kubectl k
     else

@@ -23,18 +23,16 @@ if type brew &>/dev/null; then
     # install & uninstall
     alias bri='brew install'
     alias brI='brew info'
-    alias brfi=bri
     alias bru='brew uninstall'
-    alias brfu=bru
 
     # Casks
-    alias bubco='brew update && brew cask outdated'
-    alias bcrbc='brew cask reinstall $(brew cask outdated) && brew cleanup'
-    alias bcupbc='brew cask upgrade --greedy && brew cleanup'
-    alias bubcu='bcubco && bcrbc'
+#     alias bubco='brew update && brew cask outdated'
+#     alias bcrbc='brew cask reinstall $(brew cask outdated) && brew cleanup'
+#     alias bcupbc='brew cask upgrade --greedy && brew cleanup'
+#     alias bubcu='bcubco && bcrbc'
     #
     alias brci='brew install --cask'
-    alias brcu='brew cask uninstall'
+    alias brcu='brew uninstall --cask'
 
     # brew upgrade all
 #     alias bruall='bubu; bcupbc'
@@ -42,16 +40,15 @@ if type brew &>/dev/null; then
         INFO "Fetch the newest version of Homebrew and all formulae from GitHub"
         brew update
         INFO "List installed formulae that have an updated version available."
-        brew outdated
+        brew outdated --greedy
         INFO "List the outdated installed Casks"
-        brew cask outdated
         INFO "Upgrade outdated, unpinned formulae using the same options they were originally
 installed with, plus any appended brew formula options."
         brew upgrade
         INFO "Upgrades all outdated casks"
-        brew cask upgrade --greedy
+        brew upgrade --cask --greedy
         INFO "Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae."
-        brew cleanup
+        brew cleanup --prune=all
     }
 
     alias brs='brew search'

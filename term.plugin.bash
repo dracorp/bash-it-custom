@@ -4,3 +4,4 @@ if which stty >/dev/null 2>&1; then
 fi
 
 export COLORTERM=truecolor
+export TERM_ITALICS=true

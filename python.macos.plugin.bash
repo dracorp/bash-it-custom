@@ -4,8 +4,8 @@ unset SSL_CERT_FILE REQUESTS_CA_BUNDLE VIRTUALENVWRAPPER_PYTHON PYENV_ROOT PYTHO
 # User installation, --user
 PYTHON_MAJOR_VERSION=$(python3 --version 2>&1 | awk -F'[. ]' '{ print $2"."$3}')
 # shellcheck source=/Users/u537501/Library/Python/3.7/bin/
-_add2env PATH "$HOME/Library/Python/$PYTHON_MAJOR_VERSION/bin"
-_add2env PATH=+/usr/local/opt/python@3.7/bin
+_add2env PATH $HOME/Library/Python/$PYTHON_MAJOR_VERSION/bin
+_add2env PATH=+"/usr/local/opt/python@3.7/bin"
 
 export PYTHONPATH
 # shellcheck source=/Users/u537501/Library/Python/3.7/lib/
