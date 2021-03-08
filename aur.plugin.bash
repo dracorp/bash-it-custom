@@ -11,14 +11,19 @@ aur-add-remote-origin() {
         echo "Done"
     fi
     remoteGitUrl=`echo $remoteGitUrl | awk '/origin/ {if (NR == 1) print $2}'`
+    local packageName baseRemoteUrl
+    packageName=`basename $PWD`
+    baseRemoteUrl='ssh://aur@aur.archlinux.org'
+    if [[ $remoteGitUrl =~ aur4 ]]; then
+        remoteGitUrl="${baseRemoteUrl}/${packageName}.git"
+        git remote set-url origin $remoteGitUrl
+        return
+    fi
     if [ -n "$remoteGitUrl" ]; then
         echo "Package has already defined remote url for git repository: '$remoteGitUrl'"
         return
     fi
 
-    local packageName baseRemoteUrl
-    packageName=`basename $PWD`
-    baseRemoteUrl='ssh://aur@aur.archlinux.org'
     remoteGitUrl="${baseRemoteUrl}/${packageName}.git"
     echo "Adding remote url '$remoteGitUrl' as origin"
     git remote add origin $remoteGitUrl
