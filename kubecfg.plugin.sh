@@ -1,3 +1,3 @@
 if which kubecfg &>/dev/null; then
-    . <(kubecfg completion)
+    source <(kubecfg completion)
 fi

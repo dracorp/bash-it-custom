@@ -25,16 +25,6 @@ if which kubectl &>/dev/null; then
     # kubectl-nonadminuser apply -f nginx-unprivileged.yaml
     # kubectl-nonadminuser describe pod nginx-unprivileged
 
-    if [[ $(type -t compopt) = "builtin" ]]; then
-        complete -o default -F __start_kubectl k
-    else
-        complete -o default -o nospace -F __start_kubectl k
-    fi
-
-#     function kubectl() {
-#         echo "+ kubectl $@" 1>&2
-#         command kubectl $@
-#     }
     alias kubectl-podsOnNodes='kubectl get pod -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name,STATUS:.status.phase --all-namespaces'
 #     alias kubectl-podOnNodes2='kubectl get pod -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name --all-namespaces'
 fi
