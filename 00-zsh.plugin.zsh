@@ -3,5 +3,5 @@ fpath=(~/.zsh.d/ $fpath)
 typeset -U fpath
 
 export LDFLAGS CPPFLAGS PKG_CONFIG_PATH
-ZSH_HIGHLIGHT_STYLES[globbing]='fg=white'
+[[ -n $ZSH_HIGHLIGHT_STYLES ]] && ZSH_HIGHLIGHT_STYLES[globbing]='fg=white'
 
