@@ -13,7 +13,6 @@ else
     alias l.='ls -d .*'
 fi
 
-alias lt='ls -lt | head -25'
 
 # https://nfsec.pl/1line/6154
 # TODO:
@@ -21,5 +20,3 @@ alias lt='ls -lt | head -25'
 # _add2env LS_COLORS 'ex=00:su=00:sg=00:ca=00' :
 # export LC_COLLATE=C
 # export LANG=C
-
-. "$HOME/.local/share/lscolors.sh"
