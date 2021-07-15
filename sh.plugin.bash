@@ -13,6 +13,7 @@ get_sh_directory() {
 CUSTOM_DIRECTORY=$(get_sh_directory)
 if [[ -n $CUSTOM_DIRECTORY && -d $CUSTOM_DIRECTORY ]]; then
     for sh_file in $CUSTOM_DIRECTORY/*.sh; do
+#         echo source $sh_file
         source $sh_file
     done
 fi
