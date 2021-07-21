@@ -54,14 +54,6 @@ installed with, plus any appended brew formula options."
     alias brs='brew search'
     alias brsd='brew search --desc'
 
-    for completion in /usr/local/etc/bash_completion.d/*; do
-        if [[ -f "$completion" ]]; then
-            if [[ "$completion" =~ completion.bash$ ]]; then
-                continue
-            fi
-            source $completion
-        fi
-    done
 
 #     function brew() {
 #         echo "+ brew $*" >&2

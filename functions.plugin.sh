@@ -28,3 +28,9 @@ function __wget() {
     done <&3
     exec 3>&-
 }
+# https://speedtestdemon.com/a-guide-to-curls-performance-metrics-how-to-analyze-a-speed-test-result/
+speedtest() {
+    TMP_FILE=$(mktemp tmp.XXXXXXXXXX -p /tmp)
+    curl -w "@$HOME/Documents/curl-format.txt" -o "$TMP_FILE" -s "$@"
+    rm -f "$TMP_FILE"
+}
