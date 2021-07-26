@@ -1,10 +1,10 @@
 if which kubectl &>/dev/null; then
     if [[ -d $(basher package-path ahmetb/kubectl-aliases) ]]; then
-        source $(basher package-path ahmetb/kubectl-aliases)/.kubectl_aliases
+        include ahmetb/kubectl-aliases .kubectl_aliases
     fi
 
-    alias kswitch='kubectl config use-context'
-    alias knamespace='kubectl config set-context `kubectl config current-context` --namespace'
+#     alias kswitch='kubectl config use-context'
+#     alias knamespace='kubectl config set-context `kubectl config current-context` --namespace'
 
     # get all services with in a cluster and the nodePorts they use (if any)
     alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
