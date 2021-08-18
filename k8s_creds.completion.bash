@@ -1,0 +1,1 @@
+/Users/u537501/Projects/Projects-lsy/DLABCICD/ops/ddlab/scripts/k8s_creds.completion.bash
