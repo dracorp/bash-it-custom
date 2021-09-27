@@ -1,4 +1,3 @@
-#!/usr/bin/env  bash
 __perl-local-lib() {
   local local_directory="${1:-$HOME/perl5/local-lib}"
   local alias_name="${2:-pll}"

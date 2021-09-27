@@ -12,30 +12,15 @@ if type brew &>/dev/null; then
 
     # Aliases
     alias br='brew'
-    alias brp='brew pin'
     alias brl='brew list -1'
     alias brlp='brew list --pinned'
 
-    # Formulae
-    alias bubo='brew update && brew outdated'
-    alias bubc='brew upgrade && brew cleanup'
-    alias bubu='bubo && bubc'
     # install & uninstall
     alias bri='brew install'
     alias brI='brew info'
     alias bru='brew uninstall'
 
-    # Casks
-#     alias bubco='brew update && brew cask outdated'
-#     alias bcrbc='brew cask reinstall $(brew cask outdated) && brew cleanup'
-#     alias bcupbc='brew cask upgrade --greedy && brew cleanup'
-#     alias bubcu='bcubco && bcrbc'
-    #
-    alias brci='brew install --cask'
-    alias brcu='brew uninstall --cask'
-
     # brew upgrade all
-#     alias bruall='bubu; bcupbc'
     function bruall {
         INFO "Fetch the newest version of Homebrew and all formulae from GitHub"
         brew update
@@ -53,29 +38,6 @@ installed with, plus any appended brew formula options."
 
     alias brs='brew search'
     alias brsd='brew search --desc'
-
-
-#     function brew() {
-#         echo "+ brew $*" >&2
-#         command brew "$@"
-#     }
-#     brew() {
-#         local _red _reset
-#         _red="[1;31m"
-#         _reset="[0m"
-#         if [[ "$1" =~ ^remove|rm|uninstall$ ]]; then
-#             shift 1
-#             if [[ -d "/usr/local/Cellar/$1" ]]; then
-#                 command brew rm "$@"
-#             elif [[ -d "/usr/local/Caskroom/$1" ]]; then
-#                 command brew rm  --cask"$@"
-#             else
-#                 printf "%b\n" "${_red}Error:${_reset} No such keg nor Cask $1 installed"
-#             fi
-#         else
-#             command brew "$@"
-#         fi
-#     }
 fi
 
 export HOMEBREW_INSTALL_BADGE="☕️ 🐸"

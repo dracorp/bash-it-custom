@@ -1,2 +1,3 @@
-export CMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.15.2/lib/cmake
-_add2env PATH /usr/local/Cellar/qt/5.15.2/bin
+QT_PREFIX='/usr/local/opt/qt'
+export CMAKE_PREFIX_PATH=$QT_PREFIX/lib/cmake
+_add2env PATH $QT_PREFIX/bin

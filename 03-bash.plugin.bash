@@ -27,8 +27,8 @@ export TMOUT=
 
 export HISTCONTROL=ignoreboth
 
-_rm4env /usr/local/bin
-_add2env PATH=+/usr/local/bin
+# _rm4env /usr/local/bin
+# _add2env PATH=+/usr/local/bin
 
 if ((BASH_VERSINFO[0] >= 4)) && ((BASH_VERSINFO[1] >= 2)); then
     shopt -s direxpand
