@@ -10,23 +10,7 @@ shopt -s extglob
 # !(pattern-list) none
 # patterns in a list are separated by | characters.
 
-# dodawaj do pliku history zamiast go nadpisywac
-shopt -s histappend
-
-# see also hstr.plugin.bash
-# ignoruj duplikaty
-# export HISTCONTROL=ignoredups
-# ingoruj wpisy
-export HISTIGNORE=' *:exit:cd *'
-# format daty dla wpisow w history, domyslnie brak, man date
-# export HISTTIMEFORMAT="%F %T "
-export HISTTIMEFORMAT="[%F %T] "
-# export HISTFILE=~/.history
-# PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export TMOUT=
-
-export HISTCONTROL=ignoreboth
-
 # _rm4env /usr/local/bin
 # _add2env PATH=+/usr/local/bin
 
