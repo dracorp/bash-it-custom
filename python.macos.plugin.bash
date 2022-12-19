@@ -22,7 +22,7 @@ if [ -r /etc/ssl/certs/CACompany.pem ]; then
 fi
 # export PYTHONWARNINGS="ignore"
 # for decryption, MITM
-# export PYTHONHTTPSVERIFY=0
+export PYTHONHTTPSVERIFY=0
 
 _add2env PATH ~/.local/bin
 function pip() {

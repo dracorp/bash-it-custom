@@ -11,23 +11,42 @@ else
 fi
 
 # overwrite from $BASH_IT/themes/base.theme.bash
+# k8s_context_prompt() {
+#     if _command_exists kubectl; then
+#         local kube_namespace=''
+#         kube_namespace="$(command kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
+#         if [[ $? -eq 0 ]]; then
+#             if [ -z "$kube_namespace" ]; then
+#                 kube_namespace='default'
+#             fi
+#             echo -e "$(command kubectl config current-context 2>/dev/null):${kube_namespace}"
+#         fi
+#     fi
+# }
+
 k8s_context_prompt() {
-    if _command_exists kubectl; then
-        local kube_namespace=''
-        kube_namespace="$(command kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
-        if [[ $? -eq 0 ]]; then
-            if [ -z "$kube_namespace" ]; then
+    local kube_namespace=''
+    local kube_context=''
+    if _command_exists yq && [[ -f ~/.kube/config ]]; then
+        kube_context=$(command yq '.current-context' ~/.kube/config 2>/dev/null)
+        if [[ -n $kube_context ]]; then
+            kube_namespace=$(command yq ".contexts[] | select(.context.cluster == \"$kube_context\") | .context.namespace" ~/.kube/config 2>/dev/null)
+            if [[ $kube_namespace = 'null' ]]; then
                 kube_namespace='default'
             fi
-            echo -e "$(command kubectl config current-context 2>/dev/null):${kube_namespace}"
         fi
+    elif _command_exists kubectl; then
+        kube_context=$(command kubectl config current-context 2>/dev/null)
+        kube_namespace="$(command kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)"
+    fi
+    if [[ -n $kube_context ]]; then
+        echo -e "${kube_context}:${kube_namespace-default}"
     fi
 }
-
 azure_context_prompt() {
     local AZURE_CURRENT_SUBSCRIPTION=''
     if _command_exists jq && [[ -f ~/.azure/azureProfile.json ]]; then
-        AZURE_CURRENT_SUBSCRIPTION=$(command jq -r '.subscriptions[]? | select(.isDefault==true) | .name' ~/.azure/azureProfile.json)
+        AZURE_CURRENT_SUBSCRIPTION=$(command jq -r '.subscriptions[]? | select(.isDefault==true) | .name' ~/.azure/azureProfile.json 2>/dev/null)
     fi
     echo "$AZURE_CURRENT_SUBSCRIPTION"
 }

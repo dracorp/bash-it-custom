@@ -1,6 +1,6 @@
 if [[ -d /usr/local/etc/bash_completion.d/ ]]; then
     for completion in /usr/local/etc/bash_completion.d/*; do
-#         echo $completion
+        _log_debug $completion
         . $completion
 #         complete -p git
 #         if [[ -r "$completion" ]]; then

@@ -14,3 +14,8 @@ elif [[ $_uname == AIX ]]; then
         alias mc='. /opt/freeware/libexec/mc/mc-wrapper.sh'
     fi
 fi
+
+export VIEWER
+if _command_exists bat; then
+    VIEWER=bat
+fi

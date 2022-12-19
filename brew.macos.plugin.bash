@@ -6,9 +6,12 @@ if type brew &>/dev/null; then
     export HOMEBREW_NO_AUTO_UPDATE=1
     export HOMEBREW_NO_ANALYTICS=1
     export HOMEBREW_LOGS=$HOME/log
+    export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
     # export HOMEBREW_CURL_VERBOSE=1
     # export HOMEBREW_VERBOSE=1
     # HOMEBREW_CACHE=~/Library/Caches/Homebrew
+    # Trusting homebrew casks
+    export HOMEBREW_CASK_OPTS="--no-quarantine"
 
     # Aliases
     alias br='brew'
@@ -19,6 +22,9 @@ if type brew &>/dev/null; then
     alias bri='brew install'
     alias brI='brew info'
     alias bru='brew uninstall'
+
+    alias brs='brew search'
+    alias brsd='brew search --desc'
 
     # brew upgrade all
     function bruall {
@@ -36,9 +42,5 @@ installed with, plus any appended brew formula options."
         brew cleanup --prune=all
     }
 
-    alias brs='brew search'
-    alias brsd='brew search --desc'
 fi
-
-export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 
