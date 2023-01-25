@@ -3,5 +3,4 @@
 
 alias makepkg='PKGDEST="$(echo $PWD)" LC_ALL=en_US.utf8 makepkg'
 alias pacman='LC_ALL=en_US.utf8 pacman'
-alias yaourt='LC_ALL=en_US.utf8 yaourt'
 alias reflector-update='sudo reflector --verbose --country Poland -l 5 -p http --sort rate --save /etc/pacman.d/mirrorlist'
