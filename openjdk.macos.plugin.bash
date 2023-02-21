@@ -5,5 +5,5 @@
 # fi
 # export JAVA_HOME="/usr/local/opt/openjdk"
 
-_add2env PATH=+"/usr/local/opt/openjdk@17/bin"
-export JAVA_HOME="/usr/local/opt/openjdk@17"
+_add2env PATH=+"/usr/local/opt/openjdk@19/bin"
+export JAVA_HOME="/usr/local/opt/openjdk@19"

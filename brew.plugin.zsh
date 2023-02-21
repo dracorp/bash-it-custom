@@ -53,7 +53,5 @@ installed with, plus any appended brew formula options."
     alias brs='brew search'
     alias brsd='brew search --desc'
 
-export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
 fi
-
 

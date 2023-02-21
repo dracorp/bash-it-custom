@@ -1,8 +1,6 @@
 # brew --prefix formula
 # brew --cellar formula
 if type brew &>/dev/null; then
-#     _add2env PATH "/usr/local/sbin"
-
     # brew install, brew upgrade and brew reinstall will never automatically cleanup installed/upgraded/reinstalled formulae or all formulae every HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS day
     export HOMEBREW_NO_INSTALL_CLEANUP=1
     # do not automatically update before running some commands
@@ -11,8 +9,6 @@ if type brew &>/dev/null; then
     export HOMEBREW_NO_ANALYTICS=1
     # Use this directory to store log files
     export HOMEBREW_LOGS=$HOME/log
-    # Print this text before the installation summary of each successful build.
-    export HOMEBREW_INSTALL_BADGE="☕️ 🐸"
     # use bat for brew cat
     export HOMEBREW_BAT=1
     # use Bootsnap to speed up repeated brew calls
@@ -23,6 +19,7 @@ if type brew &>/dev/null; then
     # export HOMEBREW_CURL_VERBOSE=1
     # Use this directory as the download cache
     # HOMEBREW_CACHE=~/Library/Caches/Homebrew
+    export HOMEBREW_NO_INSTALL_FROM_API=1
     # Trusting homebrew casks
     export HOMEBREW_CASK_OPTS="--no-quarantine
         --appdir=~/Applications
@@ -51,57 +48,62 @@ if type brew &>/dev/null; then
     # - search their descriptions: search, desc, info, readall, tap, audit,
     # unbottled
     # - print their JSON
-    export HOMEBREW_EVAL_ALL=1
+#     export HOMEBREW_EVAL_ALL=1
 
     # Aliases
     alias br='brew'
-#     alias brl='brew list -1'
-#     alias brlp='brew list --pinned'
 
     # install & uninstall
     alias bri='brew install'
 #     alias brI='brew info'
     alias bru='brew uninstall'
+    alias brs='brew search'
 
+    alias brs='brew search'
+    alias brsd='brew search --desc'
     # Aliases https://github.com/Homebrew/homebrew-aliases
-    # /Users/u537501/.brew-aliases/
-#     brew alias show=info
-#     brew alias p=info
-#
-#     brew alias i=install
-#     brew alias u=uninstall
-#     brew alias r=reinstall
-#
-#     brew alias update-all
-#
-#     brew alias s=search
-#     brew alias se=search
-#
-#     brew alias l=list
-#     brew alias l1='list -1'
-#     brew alias lp='list --pinned'
+    _brew-alias-create() {
+        if ! brew alias &>/dev/null; then
+            brew tap homebrew/aliases
+        fi
+        ALIASES=$(brew alias)
+        if [[ ! -d  ~/.brew-aliases || -z $ALIASES ]]; then
+            brew alias show=info
+            brew alias p=info
 
-# built-in
-# brew up = update
+            brew alias i=install
+            brew alias u=uninstall
+            brew alias r=reinstall
 
-#     alias brs='brew search'
-#     alias brsd='brew search --desc'
+            brew alias s=search
+            brew alias se=search
+            brew alias sed='!HOMEBREW_EVAL_ALL=1 brew search --desc'
+
+            brew alias l=list
+            brew alias l1='list -1'
+            brew alias lp='list --pinned'
+
+            # built-in
+            # brew up = update
+        fi
+    }
+    _brew-alias-create
 
     # brew upgrade all
-#     function bruall { #{{{
-#         INFO "Fetch the newest version of Homebrew and all formulae from GitHub"
-#         brew update
-#         INFO "List installed formulae that have an updated version available."
-#         brew outdated --greedy
-#         INFO "List the outdated installed Casks"
-#         INFO "Upgrade outdated, unpinned formulae using the same options they were originally
-# installed with, plus any appended brew formula options."
-#         brew upgrade
-#         INFO "Upgrades all outdated casks"
-#         brew upgrade --cask --greedy
-#         INFO "Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae."
-#         brew cleanup --prune=all
-#     } #}}}
+    function brew-update-all { #{{{
+        INFO "Fetch the newest version of Homebrew and all formulae from GitHub"
+        brew update
+        INFO "List installed formulae that have an updated version available."
+        brew outdated --greedy
+        INFO "List the outdated installed Casks"
+        INFO "Upgrade outdated, unpinned formulae using the same options they were originally
+installed with, plus any appended brew formula options."
+        brew upgrade
+        INFO "Upgrades all outdated casks"
+        brew upgrade --cask --greedy
+        INFO "Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae."
+        brew cleanup --prune=all
+    } #}}}
 
 fi
 

@@ -16,6 +16,6 @@ elif [[ $_uname == AIX ]]; then
 fi
 
 export VIEWER
-if _command_exists bat; then
+if hash bat &>/dev/null; then
     VIEWER=bat
 fi

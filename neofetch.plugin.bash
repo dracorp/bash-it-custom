@@ -1,3 +1,3 @@
 if which neofetch &>/dev/null; then
-    neofetch
+    ~/Projects/Projects-other/dotfiles/utils/welcome-banner.sh
 fi
